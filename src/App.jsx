@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import { useEffect, useState } from 'react'
 import useLocalStorage from './hooks/useLocalStorage'
 import Welcome from './pages/Welcome'
+import Search from './pages/Search'
 
 function App() {
 	const [welcomeScreen, setWelcomeScreen] = useLocalStorage(
@@ -18,6 +19,10 @@ function App() {
 				{
 					path: '/',
 					element: <Home />,
+				},
+				{
+					path: '/search',
+					element: <Search />,
 				},
 			],
 		},
