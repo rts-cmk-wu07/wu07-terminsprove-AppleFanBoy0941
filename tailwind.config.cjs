@@ -18,6 +18,9 @@ module.exports = {
 				text: '#000000',
 				elevated: '#E4E4E4',
 			},
+			aspectRatio: {
+				card: '3 / 4',
+			},
 		},
 	},
 	plugins: [],
