@@ -2,10 +2,8 @@ import axios from 'axios'
 import { getCookie, setCookie } from 'react-use-cookie'
 
 async function refreshToken(setTokenData) {
-	// Get the tokenData from the cookie
 	const tokenDataFromCookie = getCookie('tokenData')
 
-	// If token cookie exists
 	if (tokenDataFromCookie) {
 		const tokenDataFromCookieParsed = JSON.parse(tokenDataFromCookie)
 
