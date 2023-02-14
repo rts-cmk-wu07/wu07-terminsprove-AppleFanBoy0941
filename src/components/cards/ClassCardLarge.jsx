@@ -18,20 +18,13 @@ export default function ClassCardLarge() {
 		async function fetchImage() {
 			if (!highlightedClass) return
 
-			const response = await axios.get(highlightedClass?.asset.url)
-			setHighlightedClass({
-				...highlightedClass,
-				asset: {
-					...highlightedClass.asset,
-					image: response.data,
-				},
-			})
+			await axios.get(highlightedClass?.asset.url)
 		}
 
 		fetchImage()
 	}, [data])
 	return (
-		<div className='aspect-card bg-slate-100 w-full rounded-2xl shadow-xl overflow-hidden relative'>
+		<div className='aspect-card bg-slate-100 w-full rounded-2xl shadow-xl overflow-hidden relative mb-6'>
 			<img src={highlightedClass?.asset?.url} className='h-full object-cover' />
 			<div className='absolute top-0 left-0 w-full h-full px-6 py-12 flex flex-col justify-end items-end leading-none bg-gradient-to-t from-text/25 to-text/10'>
 				<h1 className='text-2xl text-white'>{highlightedClass?.className}</h1>

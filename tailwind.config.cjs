@@ -19,7 +19,7 @@ module.exports = {
 				elevated: '#E4E4E4',
 			},
 			aspectRatio: {
-				card: '3 / 4',
+				card: '4 / 5',
 			},
 		},
 	},
