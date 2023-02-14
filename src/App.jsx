@@ -1,12 +1,19 @@
 import Layout from './Layout'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/Home'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import useLocalStorage from './hooks/useLocalStorage'
 import Welcome from './pages/Welcome'
 import Search from './pages/Search'
+import TokenContext from './contexts/TokenContext'
 
 function App() {
+	const [token, setToken] = useState({
+		token: '',
+		userId: '',
+		validUntil: '',
+	})
+
 	const [welcomeScreen, setWelcomeScreen] = useLocalStorage(
 		'welcomeScreen',
 		true
@@ -28,9 +35,9 @@ function App() {
 		},
 	])
 	return (
-		<div>
+		<TokenContext.Provider value={{ token, setToken }}>
 			<RouterProvider router={router} />
-		</div>
+		</TokenContext.Provider>
 	)
 }
 
