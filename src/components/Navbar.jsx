@@ -1,11 +1,12 @@
-import { Triangle, Menu, X } from 'lucide-react'
-import { Link, useLocation, useNavigation } from 'react-router-dom'
+import { Triangle, Menu as MenuIcon, X } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
+import Menu from './Menu'
 
 export default function Navbar() {
 	const location = useLocation()
-	const navigate = useNavigation()
+	const navigate = useNavigate()
 
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -80,36 +81,20 @@ export default function Navbar() {
 				className='h-8 w-8 flex justify-center items-center'
 				onClick={() => setIsMenuOpen(!isMenuOpen)}
 			>
-				<AnimatePresence>
-					{isMenuOpen ? (
-						<motion.div
-							key={1}
-							initial={{ opacity: 0, scale: 0 }}
-							animate={{ opacity: 1, scale: 1 }}
-							exit={{ opacity: 0, scale: 0 }}
-							className='h-8 w-8 absolute'
-						>
-							<X
-								className='fill-elevated text-elevated h-8 w-8'
-								strokeWidth={3}
-							/>
-						</motion.div>
-					) : (
-						<motion.div
-							key={2}
-							initial={{ opacity: 0, scale: 0 }}
-							animate={{ opacity: 1, scale: 1 }}
-							exit={{ opacity: 0, scale: 0 }}
-							className='h-8 w-8 absolute'
-						>
-							<Menu
-								className='fill-elevated text-elevated h-8 w-8'
-								strokeWidth={3}
-							/>
-						</motion.div>
-					)}
-				</AnimatePresence>
+				<motion.div
+					key={2}
+					initial={{ opacity: 0, scale: 0 }}
+					animate={{ opacity: 1, scale: 1 }}
+					exit={{ opacity: 0, scale: 0 }}
+					className='h-8 w-8 absolute'
+				>
+					<MenuIcon
+						className='fill-elevated text-elevated h-8 w-8'
+						strokeWidth={3}
+					/>
+				</motion.div>
 			</button>
+			<Menu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
 		</nav>
 	)
 }

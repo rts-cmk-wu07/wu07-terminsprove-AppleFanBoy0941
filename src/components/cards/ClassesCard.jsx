@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function ClassesCard({ item }) {
-	console.log(item)
 	const navigate = useNavigate()
 
 	//? Could this be better? Images are too large, and text aswell, but makes no sense to make i smaller
