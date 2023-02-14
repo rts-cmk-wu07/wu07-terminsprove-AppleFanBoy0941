@@ -16,6 +16,10 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 	const [usernameError, setUsernameError] = useState('')
 	const [passwordError, setPasswordError] = useState('')
 
+	function formatDateToDays(date) {
+		return Math.round(((date - Date.now()) / (1000 * 60 * 60 * 24)) * 100) / 100
+	}
+
 	async function signIn() {
 		setPasswordError('')
 		setUsernameError('')
@@ -45,11 +49,7 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 			)
 
 			setCookie('token', JSON.stringify(response.data), {
-				days:
-					Math.round(
-						((response.data.validUntil - Date.now()) / (1000 * 60 * 60 * 24)) *
-							100
-					) / 100,
+				days: formatDateToDays(response.data.validUntil),
 			})
 
 			setLoading(false)
@@ -107,12 +107,7 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 			console.log(tokenResponse)
 
 			setCookie('token', JSON.stringify(tokenResponse.data), {
-				days:
-					Math.round(
-						((tokenResponse.data.validUntil - Date.now()) /
-							(1000 * 60 * 60 * 24)) *
-							100
-					) / 100,
+				days: formatDateToDays(tokenResponse.data.validUntil),
 			})
 
 			setLoading(false)
@@ -135,7 +130,7 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 			{isOpen && (
 				<motion.div
 					key='signIn'
-					className='dontclose fixed inset-0 flex flex-col pt-32 px-6 z-50'
+					className='fixed inset-0 flex flex-col pt-32 px-6 z-50'
 					initial={{
 						background: '#ffffff00',
 						backdropFilter: 'blur(0px)',
@@ -161,76 +156,54 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 					>
 						<X className='h-8 w-8 text-elevated' strokeWidth={3} />
 					</motion.button>
-					{type === 'signIn' ? (
-						<motion.div
-							className=''
-							initial={{ opacity: 0, y: 32 }}
+					{/* {type === 'signIn' ? ( */}
+					<motion.div
+						className=''
+						initial={{ opacity: 0, y: 32 }}
+						animate={{ opacity: 1, y: 0 }}
+					>
+						<motion.h1
+							key={type}
+							initial={{ opacity: 0, y: 12 }}
 							animate={{ opacity: 1, y: 0 }}
+							className='text-xl'
 						>
-							<h1 className='text-xl'>Sign In</h1>
-							<Input
-								placeholder='Username'
-								value={username}
-								onChange={e => setUsername(e.target.value)}
-								errorMessage={usernameError}
-							/>
-							<Input
-								placeholder='Password'
-								value={password}
-								onChange={e => setPassword(e.target.value)}
-								type='password'
-								errorMessage={passwordError}
-							/>
-							<SubmitButton
-								loading={loading}
-								onClick={signIn}
-								label='Sign in'
-							/>
-							<p className='text-base mt-12'>
-								Don't have an account?{' '}
-								<span
-									className='text-primary cursor-pointer'
-									onClick={() => setType('signUp')}
-								>
-									Sign Up
-								</span>
-							</p>
-						</motion.div>
-					) : (
-						<motion.div
-							key='signUp'
-							className=''
-							initial={{ opacity: 0, y: 32 }}
-							animate={{ opacity: 1, y: 0 }}
-						>
-							<h1 className='text-xl'>Sign Up</h1>
-							<Input
-								placeholder='Username'
-								value={username}
-								onChange={e => setUsername(e.target.value)}
-							/>
-							<Input
-								placeholder='Password'
-								value={password}
-								onChange={e => setPassword(e.target.value)}
-								type='password'
-							/>
-							<SubmitButton
-								loading={loading}
-								onClick={signUp}
-								label='Sign up'
-							/>
-							<p className='text-base'>
-								Already have an account?{' '}
-								<span
-									className='text-primary cursor-pointer'
-									onClick={() => setType('signIn')}
-								>
-									Sign In
-								</span>
-							</p>
-						</motion.div>
-					)}
+							{type === 'signIn' ? 'Sign in' : 'Sign up'}
+						</motion.h1>
+						<Input
+							placeholder='Username'
+							value={username}
+							onChange={e => setUsername(e.target.value)}
+							errorMessage={usernameError}
+						/>
+						<Input
+							placeholder='Password'
+							value={password}
+							onChange={e => setPassword(e.target.value)}
+							type='password'
+							errorMessage={passwordError}
+						/>
+						<SubmitButton
+							loading={loading}
+							onClick={() => {
+								if (type === 'signIn') {
+									signIn()
+								} else {
+									signUp()
+								}
+							}}
+							label='Sign in'
+						/>
+						<p className='text-base mt-12'>
+							Don't have an account?{' '}
+							<span
+								className='text-primary cursor-pointer'
+								onClick={() => setType(type === 'signIn' ? 'signUp' : 'signIn')}
+							>
+								{type === 'signIn' ? 'Sign up' : 'Sign in'}
+							</span>
+						</p>
+					</motion.div>
 				</motion.div>
 			)}
 		</AnimatePresence>
