@@ -1,16 +1,23 @@
 import { Triangle, Menu, X } from 'lucide-react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 
 export default function Navbar() {
 	const location = useLocation()
+	const navigate = useNavigation()
 
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 
 	return (
-		<nav className='fixed top-0 left-0 w-full bg-background flex items-center justify-between gap-4 p-6 h-20'>
-			<Link className='h-8 flex items-center' to='/'>
+		<nav className='fixed top-0 left-0 w-full bg-background flex items-center justify-between gap-4 p-6 h-20 z-50'>
+			<button
+				className='h-8 flex items-center'
+				to='/'
+				onClick={() => {
+					navigate(-1)
+				}}
+			>
 				<motion.div
 					className='h-8 w-8'
 					animate={{
@@ -44,7 +51,7 @@ export default function Navbar() {
 						</motion.p>
 					)}
 				</AnimatePresence>
-			</Link>
+			</button>
 			<AnimatePresence>
 				{location.pathname === '/' && (
 					<motion.p
