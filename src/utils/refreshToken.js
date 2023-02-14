@@ -2,38 +2,34 @@ import axios from 'axios'
 import { getCookie, setCookie } from 'react-use-cookie'
 
 async function refreshToken(setTokenData) {
-	const tokenDataFromCookie = getCookie('tokenData')
+	const tokenDataFromCookie = getCookie('token')
 
 	if (tokenDataFromCookie) {
 		const tokenDataFromCookieParsed = JSON.parse(tokenDataFromCookie)
 
-		// Check weather its expired or not
-		// Fake force a token to be expired then (currentTime * 1000)
-		const currentTime = new Date().getTime()
+		const currentTime = Date.now()
 		if (tokenDataFromCookieParsed.expiratedDate > currentTime) {
-			// Token is all good
 			setTokenData(tokenDataFromCookieParsed)
 		} else {
-			// Token needs a refresh
-			axios
-				.post(
-					'/.netlify/functions/refresh_token',
-					JSON.stringify({
-						refresh_token: tokenDataFromCookieParsed.refreshToken,
-					})
-				)
-				.then(response => {
-					const resData = {
-						accessToken: response.data.access_token,
-						refreshToken: response.data.refresh_token
-							? response.data.refresh_token
-							: tokenDataFromCookieParsed.refreshToken,
-						expiratedDate:
-							new Date().getTime() + response.data.expires_in * 1000,
-					}
-					setTokenData(resData)
-					setCookie('tokenData', JSON.stringify(resData))
-				})
+			// axios
+			// 	.post(
+			// 		`${import.meta.env.VITE_AUTH_URL}token`,
+			// 		JSON.stringify({
+			// 			refresh_token: tokenDataFromCookieParsed.refreshToken,
+			// 		})
+			// 	)
+			// 	.then(response => {
+			// 		const resData = {
+			// 			accessToken: response.data.access_token,
+			// 			refreshToken: response.data.refresh_token
+			// 				? response.data.refresh_token
+			// 				: tokenDataFromCookieParsed.refreshToken,
+			// 			expiratedDate:
+			// 				new Date().getTime() + response.data.expires_in * 1000,
+			// 		}
+			// 		setTokenData(resData)
+			// 		setCookie('tokenData', JSON.stringify(resData))
+			// 	})
 		}
 	} else {
 	}

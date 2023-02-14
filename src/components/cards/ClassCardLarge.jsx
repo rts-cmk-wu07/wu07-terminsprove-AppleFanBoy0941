@@ -25,7 +25,7 @@ export default function ClassCardLarge() {
 			className='aspect-card bg-elevated w-full rounded-2xl shadow-xl overflow-hidden relative mb-6'
 		>
 			<img src={highlightedClass?.asset?.url} className='h-full object-cover' />
-			<div className='absolute top-0 left-0 w-full h-full px-6 py-12 flex flex-col justify-end items-end leading-none bg-gradient-to-t from-text/25 to-text/10'>
+			<div className='absolute inset-0 px-6 py-12 flex flex-col justify-end items-end leading-none bg-gradient-to-t from-text/25 to-text/10'>
 				<h1 className='text-2xl text-white'>
 					<Link to={`/classes/${highlightedClass?.id}`}>
 						{highlightedClass?.className}
