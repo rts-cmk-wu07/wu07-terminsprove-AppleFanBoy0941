@@ -1,7 +1,6 @@
 import useAxios from '../../hooks/useAxios'
 import ClassesCard from './ClassesCard'
 import { motion } from 'framer-motion'
-import { useEffect } from 'react'
 
 export default function ClassesList({ title, filter }) {
 	const { data, loading, error } = useAxios('classes', true)
@@ -38,10 +37,6 @@ export default function ClassesList({ title, filter }) {
 		return sorted
 	}
 
-	useEffect(() => {
-		console.log(filterClasses())
-	}, [filter])
-
 	// TODO: Add loading and error states for this component
 
 	return (
@@ -69,7 +64,7 @@ export default function ClassesList({ title, filter }) {
 				{filterClasses().length > 0 ? (
 					filterClasses().map(item => <ClassesCard key={item.id} item={item} />)
 				) : (
-					<p className='text-base'>
+					<p className='text-base text-primary'>
 						Your search did not give any results. Try to search for something
 						else.
 					</p>
