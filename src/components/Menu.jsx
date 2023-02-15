@@ -1,6 +1,5 @@
-import { motion, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { Link, useNavigate } from 'react-router-dom'
 import SignInOut from '../templates/SignInOut'
 import { useState } from 'react'
 import { getCookie, setCookie } from 'react-use-cookie'
@@ -11,6 +10,8 @@ export default function Menu({ isOpen, setIsOpen }) {
 	const [type, setType] = useState('signIn')
 
 	const token = getCookie('token')
+
+	const navigate = useNavigate()
 
 	const links = [
 		{
@@ -24,7 +25,9 @@ export default function Menu({ isOpen, setIsOpen }) {
 	]
 
 	async function signOut() {
-		setCookie('token', '', { days: -1 })
+		setCookie('token', null, { days: -1 })
+
+		navigate(0)
 		setIsOpen(false)
 	}
 

@@ -4,12 +4,17 @@ import { X } from 'lucide-react'
 import Input from '../components/Input'
 import axios from 'axios'
 import { setCookie } from 'react-use-cookie'
-import SubmitButton from '../components/SubmitButton'
+import SubmitButton from '../components/ClassicButton'
 import TokenContext from '../contexts/TokenContext'
 import refreshToken from '../utils/refreshToken'
 import Sheet from '../components/Sheet'
 
-export default function SignInOut({ isOpen, setIsOpen, initialType }) {
+export default function SignInOut({
+	isOpen,
+	setIsOpen,
+	initialType,
+	additionalCallback,
+}) {
 	const [type, setType] = useState(initialType || 'signIn')
 	const [loading, setLoading] = useState(false)
 
@@ -63,6 +68,10 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 
 			setLoading(false)
 			setIsOpen(false)
+
+			if (additionalCallback) {
+				additionalCallback()
+			}
 		} catch (error) {
 			setLoading(false)
 
@@ -129,6 +138,10 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 
 			setLoading(false)
 			setIsOpen(false)
+
+			if (additionalCallback) {
+				additionalCallback()
+			}
 		} catch (error) {
 			setLoading(false)
 

@@ -3,7 +3,7 @@ import ClassesCard from './ClassesCard'
 import { motion } from 'framer-motion'
 
 export default function ClassesList({ title }) {
-	const [data, loading, error] = useAxios('classes', true)
+	const { data, loading, error } = useAxios('classes', true)
 
 	// TODO: Add loading and error states for this component
 
