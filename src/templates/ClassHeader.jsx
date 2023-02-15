@@ -14,11 +14,8 @@ export default function ClassHeader({ classData, inClass, setInClass }) {
 	const [isSignInOpen, setIsSignInOpen] = useState(false) // if user is not signed in and opens sign in sheet
 
 	const { token } = useContext(TokenContext)
-	const navigate = useNavigate()
 
-	const { data, loading, error, deleteData, postData } = useAxios(
-		`users/${token.userId}`
-	)
+	const { postData } = useAxios(`users/${token.userId}`)
 
 	function signUp() {
 		if (token.userId === '') {
@@ -29,7 +26,6 @@ export default function ClassHeader({ classData, inClass, setInClass }) {
 	}
 
 	async function subscribe() {
-		console.log('subscribe')
 		await postData(null, `/classes/${classData.id}`)
 
 		setIsSignUpSheetOpen(false)
@@ -96,10 +92,11 @@ export default function ClassHeader({ classData, inClass, setInClass }) {
 						variants={textvariants}
 						className='text-xl leading-none mb-4'
 					>
-						You have to be signed in
+						You need an account
 					</motion.h1>
 					<motion.p variants={textvariants} className='text-base'>
-						Sign in or create a free account today!
+						To sign up for this class you need to create an account. Log in or
+						create a free account.
 					</motion.p>
 					<motion.div
 						variants={textvariants}
@@ -111,7 +108,7 @@ export default function ClassHeader({ classData, inClass, setInClass }) {
 							color='primary'
 						/>
 						<ClassicButton
-							label='Sign in'
+							label='Log in'
 							onClick={() => setIsSignInOpen(true)}
 							color='elevated'
 						/>

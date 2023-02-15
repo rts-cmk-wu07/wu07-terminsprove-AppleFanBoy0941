@@ -89,7 +89,7 @@ export default function Menu({ isOpen, setIsOpen }) {
 								onClick={signOut}
 								className='dontclose inline-block text-lg px-4 py-2'
 							>
-								Sign out
+								Log out
 							</button>
 						</motion.li>
 					</>
@@ -107,7 +107,7 @@ export default function Menu({ isOpen, setIsOpen }) {
 								setType('signIn')
 							}}
 						>
-							Sign in
+							Log in
 						</button>
 					</motion.li>
 				)}
