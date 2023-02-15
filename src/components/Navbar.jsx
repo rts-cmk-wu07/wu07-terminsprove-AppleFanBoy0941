@@ -10,8 +10,14 @@ export default function Navbar() {
 
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+	const path = location.pathname.split('/')[1]
+
 	return (
-		<nav className='fixed top-0 left-0 w-full bg-background flex items-center justify-between gap-4 p-6 h-20 z-50'>
+		<nav
+			className={`fixed top-0 left-0 w-full ${
+				path !== 'classes' ? 'bg-background' : 'bg-background/0'
+			} flex items-center justify-between gap-4 p-6 h-20 z-50 transition-colors`}
+		>
 			<button
 				className='h-8 flex items-center'
 				to='/'

@@ -6,6 +6,7 @@ import useLocalStorage from './hooks/useLocalStorage'
 import Welcome from './pages/Welcome'
 import Search from './pages/Search'
 import TokenContext from './contexts/TokenContext'
+import Class from './pages/Class'
 
 function App() {
 	const [token, setToken] = useState({
@@ -30,6 +31,10 @@ function App() {
 				{
 					path: '/search',
 					element: <Search />,
+				},
+				{
+					path: '/classes/:id',
+					element: <Class />,
 				},
 			],
 		},

@@ -1,12 +1,20 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { X } from 'lucide-react'
 import Input from '../components/Input'
 import axios from 'axios'
 import { setCookie } from 'react-use-cookie'
-import SubmitButton from '../components/SubmitButton'
+import SubmitButton from '../components/ClassicButton'
+import TokenContext from '../contexts/TokenContext'
+import refreshToken from '../utils/refreshToken'
+import Sheet from '../components/Sheet'
 
-export default function SignInOut({ isOpen, setIsOpen, initialType }) {
+export default function SignInOut({
+	isOpen,
+	setIsOpen,
+	initialType,
+	additionalCallback,
+}) {
 	const [type, setType] = useState(initialType || 'signIn')
 	const [loading, setLoading] = useState(false)
 
@@ -17,6 +25,8 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 	const [usernameError, setUsernameError] = useState('')
 	const [passwordError, setPasswordError] = useState('')
 	const [confirmPasswordError, setConfirmPasswordError] = useState('')
+
+	const { setToken } = useContext(TokenContext)
 
 	function formatDateToDays(date) {
 		return Math.round(((date - Date.now()) / (1000 * 60 * 60 * 24)) * 100) / 100
@@ -54,8 +64,14 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 				days: formatDateToDays(response.data.validUntil),
 			})
 
+			refreshToken(setToken)
+
 			setLoading(false)
 			setIsOpen(false)
+
+			if (additionalCallback) {
+				additionalCallback()
+			}
 		} catch (error) {
 			setLoading(false)
 
@@ -118,8 +134,14 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 				days: formatDateToDays(tokenResponse.data.validUntil),
 			})
 
+			refreshToken(setToken)
+
 			setLoading(false)
 			setIsOpen(false)
+
+			if (additionalCallback) {
+				additionalCallback()
+			}
 		} catch (error) {
 			setLoading(false)
 
@@ -134,98 +156,67 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 	}
 
 	return (
-		<AnimatePresence>
-			{isOpen && (
-				<motion.div
-					key='signIn'
-					className='fixed inset-0 flex flex-col pt-32 px-6 z-50'
-					initial={{
-						background: '#ffffff00',
-						backdropFilter: 'blur(0px)',
-						// opacity: 0,
-					}}
-					animate={{
-						background: '#ffffffff',
-						backdropFilter: 'blur(4px)',
-						opacity: 1,
-						transition: { duration: 0.4 },
-					}}
-					exit={{
-						// background: '#ffffff00',
-						backdropFilter: 'blur(0px)',
-						opacity: 0,
-					}}
+		<Sheet isOpen={isOpen} setIsOpen={setIsOpen} clickOutsideCloses={false}>
+			{/* {type === 'signIn' ? ( */}
+			<motion.div
+				key={type}
+				className=''
+				initial={{ opacity: 0, y: 32 }}
+				animate={{ opacity: 1, y: 0 }}
+			>
+				<motion.h1
+					key={type}
+					initial={{ opacity: 0, y: 12 }}
+					animate={{ opacity: 1, y: 0 }}
+					className='text-xl'
 				>
-					<motion.button
-						initial={{ opacity: 0, scale: 0.9 }}
-						animate={{ opacity: 1, scale: 1, transition: { delay: 0.3 } }}
-						onClick={() => setIsOpen(false)}
-						className='top-6 right-6 h-8 w-8 absolute'
+					{type === 'signIn' ? 'Sign in' : 'Sign up'}
+				</motion.h1>
+				<Input
+					placeholder='Username'
+					value={username}
+					onChange={e => setUsername(e.target.value)}
+					errorMessage={usernameError}
+				/>
+				<Input
+					placeholder='Password'
+					value={password}
+					onChange={e => setPassword(e.target.value)}
+					type='password'
+					errorMessage={passwordError}
+				/>
+				{type === 'signUp' && (
+					<Input
+						placeholder='Confirm password'
+						value={confirmPassword}
+						onChange={e => setConfirmPassword(e.target.value)}
+						type='password'
+						errorMessage={confirmPasswordError}
+					/>
+				)}
+				<SubmitButton
+					loading={loading}
+					onClick={() => {
+						if (type === 'signIn') {
+							signIn()
+						} else {
+							signUp()
+						}
+					}}
+					label={type === 'signIn' ? 'Sign in' : 'Sign up for free'}
+				/>
+				<p className='text-base mt-12'>
+					{type === 'signIn'
+						? `Don't have an account?`
+						: 'Already have an account?'}{' '}
+					<span
+						className='text-primary cursor-pointer'
+						onClick={() => setType(type === 'signIn' ? 'signUp' : 'signIn')}
 					>
-						<X className='h-8 w-8 text-elevated' strokeWidth={3} />
-					</motion.button>
-					{/* {type === 'signIn' ? ( */}
-					<motion.div
-						key={type}
-						className=''
-						initial={{ opacity: 0, y: 32 }}
-						animate={{ opacity: 1, y: 0 }}
-					>
-						<motion.h1
-							key={type}
-							initial={{ opacity: 0, y: 12 }}
-							animate={{ opacity: 1, y: 0 }}
-							className='text-xl'
-						>
-							{type === 'signIn' ? 'Sign in' : 'Sign up'}
-						</motion.h1>
-						<Input
-							placeholder='Username'
-							value={username}
-							onChange={e => setUsername(e.target.value)}
-							errorMessage={usernameError}
-						/>
-						<Input
-							placeholder='Password'
-							value={password}
-							onChange={e => setPassword(e.target.value)}
-							type='password'
-							errorMessage={passwordError}
-						/>
-						{type === 'signUp' && (
-							<Input
-								placeholder='Confirm password'
-								value={confirmPassword}
-								onChange={e => setConfirmPassword(e.target.value)}
-								type='password'
-								errorMessage={confirmPasswordError}
-							/>
-						)}
-						<SubmitButton
-							loading={loading}
-							onClick={() => {
-								if (type === 'signIn') {
-									signIn()
-								} else {
-									signUp()
-								}
-							}}
-							label={type === 'signIn' ? 'Sign in' : 'Sign up for free'}
-						/>
-						<p className='text-base mt-12'>
-							{type === 'signIn'
-								? `Don't have an account?`
-								: 'Already have an account?'}{' '}
-							<span
-								className='text-primary cursor-pointer'
-								onClick={() => setType(type === 'signIn' ? 'signUp' : 'signIn')}
-							>
-								{type === 'signIn' ? 'Sign up' : 'Sign in'}
-							</span>
-						</p>
-					</motion.div>
-				</motion.div>
-			)}
-		</AnimatePresence>
+						{type === 'signIn' ? 'Sign up' : 'Sign in'}
+					</span>
+				</p>
+			</motion.div>
+		</Sheet>
 	)
 }

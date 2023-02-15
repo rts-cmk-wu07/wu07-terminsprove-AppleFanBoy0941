@@ -10,7 +10,7 @@ export default function useAxios(endpoint, noToken, fullUrl = false) {
 
 	const { token, setToken } = useContext(TokenContext)
 
-	const { accessToken } = token
+	const { token: accessToken } = token
 
 	useEffect(() => {
 		if (!accessToken && !noToken) return
@@ -34,5 +34,60 @@ export default function useAxios(endpoint, noToken, fullUrl = false) {
 			})
 	}, [endpoint, accessToken, setToken])
 
-	return [data, loading, error]
+	async function postData(data, additionalEndpoint = '') {
+		if (!accessToken && !noToken) return
+		if (!endpoint) return
+
+		setLoading(true)
+
+		refreshTokenFunction(setToken)
+
+		const response = await axios.post(
+			`${
+				!fullUrl && import.meta.env.VITE_API_URL
+			}${endpoint}${additionalEndpoint}`,
+			data,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}
+		)
+
+		if (response.status >= 200 && response.status < 300) {
+			setData(response.data)
+			setLoading(false)
+		} else {
+			setError(response.status)
+		}
+	}
+
+	async function deleteData(additionalEndpoint = '') {
+		if (!accessToken && !noToken) return
+		if (!endpoint) return
+
+		setLoading(true)
+
+		refreshTokenFunction(setToken)
+
+		const response = await axios.delete(
+			`${
+				!fullUrl && import.meta.env.VITE_API_URL
+			}${endpoint}${additionalEndpoint}`,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}
+		)
+
+		if (response.status >= 200 && response.status < 300) {
+			setData(response.data)
+			setLoading(false)
+		} else {
+			setError(response.status)
+		}
+	}
+
+	return { data, loading, error, deleteData, postData }
 }

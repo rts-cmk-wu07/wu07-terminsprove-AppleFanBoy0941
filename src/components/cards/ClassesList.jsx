@@ -3,12 +3,12 @@ import ClassesCard from './ClassesCard'
 import { motion } from 'framer-motion'
 
 export default function ClassesList({ title }) {
-	const [data, loading, error] = useAxios('classes', true)
+	const { data, loading, error } = useAxios('classes', true)
 
 	// TODO: Add loading and error states for this component
 
 	return (
-		<div className='w-screen -ml-6 relative'>
+		<div className='w-screen -ml-6 relative overflow-hidden'>
 			<h1 className='text-lg my-2 px-6'>{title}</h1>
 			<motion.ul
 				whileInView={{

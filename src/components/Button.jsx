@@ -11,7 +11,7 @@ export default function Button({ children, xSize = 'lg', ...props }) {
 			{...props}
 			className={`bg-white text-lg w-fit py-4 ${
 				xSize === 'sm' ? 'px-6' : 'px-16'
-			} rounded-l-2xl -mt-4 ml-auto`}
+			} rounded-l-2xl -mt-4 ml-auto shrink-0 whitespace-nowrap`}
 		>
 			{children}
 		</motion.button>

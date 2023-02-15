@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 export default function ClassCardLarge() {
 	const [highlightedClass, setHighlightedClass] = useState(null)
-	const [data, loading, error] = useAxios('classes', true)
+	const { data, loading, error } = useAxios('classes', true)
 
 	const navigate = useNavigate()
 
