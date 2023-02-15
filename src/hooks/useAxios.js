@@ -10,7 +10,7 @@ export default function useAxios(endpoint, noToken, fullUrl = false) {
 
 	const { token, setToken } = useContext(TokenContext)
 
-	const { accessToken } = token
+	const { token: accessToken } = token
 
 	useEffect(() => {
 		if (!accessToken && !noToken) return

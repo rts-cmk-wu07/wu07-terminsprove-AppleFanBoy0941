@@ -8,7 +8,7 @@ export default function ClassesList({ title }) {
 	// TODO: Add loading and error states for this component
 
 	return (
-		<div className='w-screen -ml-6 relative'>
+		<div className='w-screen -ml-6 relative overflow-hidden'>
 			<h1 className='text-lg my-2 px-6'>{title}</h1>
 			<motion.ul
 				whileInView={{
