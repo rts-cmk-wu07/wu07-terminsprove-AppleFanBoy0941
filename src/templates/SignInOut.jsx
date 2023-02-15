@@ -158,6 +158,7 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 					</motion.button>
 					{/* {type === 'signIn' ? ( */}
 					<motion.div
+						key={type}
 						className=''
 						initial={{ opacity: 0, y: 32 }}
 						animate={{ opacity: 1, y: 0 }}
@@ -192,10 +193,12 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 									signUp()
 								}
 							}}
-							label='Sign in'
+							label={type === 'signIn' ? 'Sign in' : 'Sign up for free'}
 						/>
 						<p className='text-base mt-12'>
-							Don't have an account?{' '}
+							{type === 'signIn'
+								? `Don't have an account?`
+								: 'Already have an account?'}{' '}
 							<span
 								className='text-primary cursor-pointer'
 								onClick={() => setType(type === 'signIn' ? 'signUp' : 'signIn')}
