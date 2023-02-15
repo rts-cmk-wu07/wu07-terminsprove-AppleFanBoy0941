@@ -12,9 +12,11 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
+	const [confirmPassword, setConfirmPassword] = useState('')
 
 	const [usernameError, setUsernameError] = useState('')
 	const [passwordError, setPasswordError] = useState('')
+	const [confirmPasswordError, setConfirmPasswordError] = useState('')
 
 	function formatDateToDays(date) {
 		return Math.round(((date - Date.now()) / (1000 * 60 * 60 * 24)) * 100) / 100
@@ -83,6 +85,12 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 
 		if (!password) {
 			setPasswordError('Password is required')
+			setLoading(false)
+			return
+		}
+
+		if (password !== confirmPassword) {
+			setConfirmPasswordError('Passwords do not match')
 			setLoading(false)
 			return
 		}
@@ -184,6 +192,15 @@ export default function SignInOut({ isOpen, setIsOpen, initialType }) {
 							type='password'
 							errorMessage={passwordError}
 						/>
+						{type === 'signUp' && (
+							<Input
+								placeholder='Confirm password'
+								value={confirmPassword}
+								onChange={e => setConfirmPassword(e.target.value)}
+								type='password'
+								errorMessage={confirmPasswordError}
+							/>
+						)}
 						<SubmitButton
 							loading={loading}
 							onClick={() => {

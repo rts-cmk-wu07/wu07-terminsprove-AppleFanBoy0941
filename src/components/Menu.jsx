@@ -76,6 +76,7 @@ export default function Menu({ isOpen, setIsOpen }) {
 						{links.map(link => {
 							return (
 								<motion.li
+									key={link.name}
 									variants={{
 										hidden: { y: 16, opacity: 0 },
 										visible: { y: 0, opacity: 1 },
