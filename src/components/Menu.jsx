@@ -72,10 +72,7 @@ export default function Menu({ isOpen, setIsOpen }) {
 								visible: { y: 0, opacity: 1 },
 							}}
 						>
-							<Link
-								className='dontclose inline-block text-lg px-4 py-2'
-								to='/schedule'
-							>
+							<Link className='inline-block text-lg px-4 py-2' to='/schedule'>
 								My Schedule
 							</Link>
 						</motion.li>

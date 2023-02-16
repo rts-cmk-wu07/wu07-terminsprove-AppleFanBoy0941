@@ -1,12 +1,14 @@
 import Layout from './Layout'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/Home'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useLocalStorage from './hooks/useLocalStorage'
 import Welcome from './pages/Welcome'
 import Search from './pages/Search'
 import TokenContext from './contexts/TokenContext'
 import Class from './pages/Class'
+import Schedule from './pages/Schedule'
+import refreshToken from './utils/refreshToken'
 
 function App() {
 	const [token, setToken] = useState({
@@ -14,6 +16,10 @@ function App() {
 		userId: '',
 		validUntil: '',
 	})
+
+	useEffect(() => {
+		refreshToken(setToken)
+	}, [])
 
 	const [welcomeScreen, setWelcomeScreen] = useLocalStorage(
 		'welcomeScreen',
@@ -35,6 +41,10 @@ function App() {
 				{
 					path: '/classes/:id',
 					element: <Class />,
+				},
+				{
+					path: '/schedule',
+					element: <Schedule />,
 				},
 			],
 		},
