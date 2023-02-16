@@ -35,12 +35,17 @@ export default function useAxios(endpoint, noToken, fullUrl = false) {
 	}, [endpoint, accessToken, setToken])
 
 	async function postData(data, additionalEndpoint = '') {
+		console.log(data)
 		if (!accessToken && !noToken) return
 		if (!endpoint) return
 
 		setLoading(true)
 
 		refreshTokenFunction(setToken)
+
+		console.log(
+			!fullUrl && import.meta.env.VITE_API_URL + endpoint + additionalEndpoint
+		)
 
 		const response = await axios.post(
 			`${
@@ -54,11 +59,15 @@ export default function useAxios(endpoint, noToken, fullUrl = false) {
 			}
 		)
 
+		console.log(response)
+
 		if (response.status >= 200 && response.status < 300) {
 			setData(response.data)
 			setLoading(false)
+			console.log(response)
 		} else {
 			setError(response.status)
+			console.log(response)
 		}
 	}
 

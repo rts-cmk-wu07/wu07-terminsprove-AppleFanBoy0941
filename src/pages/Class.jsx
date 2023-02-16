@@ -56,22 +56,20 @@ export default function Class() {
 
 	return (
 		<div className='pb-6'>
-			<ClassHeader classData={data} inClass={inClass} setInClass={setInClass} />
+			<ClassHeader
+				classData={data}
+				inClass={inClass}
+				setInClass={setInClass}
+				loading={loading}
+				leaveClass={leaveClass}
+				setLeaveSheetOpen={setIsLeaveOpen}
+			/>
 			<div className='px-6'>
 				<ClassDetails classData={data} />
 				<div className='mt-2'>
 					<TrainersList title='Trainer' trainer={data?.trainer?.id} />
 				</div>
 
-				{inClass && (
-					<div className='mt-6'>
-						<ClassicButton
-							label='Leave class'
-							color='elevated'
-							onClick={() => setIsLeaveOpen(true)}
-						/>
-					</div>
-				)}
 				<Sheet
 					isOpen={isLeaveOpen}
 					setIsOpen={setIsLeaveOpen}
