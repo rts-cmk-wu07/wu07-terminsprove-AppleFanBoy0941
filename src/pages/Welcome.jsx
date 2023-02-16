@@ -50,6 +50,7 @@ export default function Welcome() {
 						setWelcomeScreen(false)
 						navigate(0)
 					}}
+					negativeTopMargin
 				>
 					Start training
 				</Button>

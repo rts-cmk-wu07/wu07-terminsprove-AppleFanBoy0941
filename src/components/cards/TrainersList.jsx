@@ -2,12 +2,14 @@ import { motion } from 'framer-motion'
 import useAxios from '../../hooks/useAxios'
 import TrainersCard from './TrainersCard'
 
-export default function TrainersList({ title, filter }) {
+export default function TrainersList({ title, filter, trainer }) {
 	const { data, loading, error } = useAxios('trainers', true)
 
 	function filteredTrainers() {
 		if (!data || Object.keys(data).length < 1) return
 		if (filter === '') return data
+
+		if (trainer) return data.filter(t => t.id === trainer)
 
 		const filtered = data?.filter(trainer => {
 			const name = trainer.trainerName.toLowerCase()

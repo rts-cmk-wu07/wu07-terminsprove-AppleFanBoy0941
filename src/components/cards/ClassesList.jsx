@@ -6,7 +6,8 @@ export default function ClassesList({ title, filter }) {
 	const { data, loading, error } = useAxios('classes', true)
 
 	function filterClasses() {
-		if (filter === '') return data
+		if (!filter || filter === '') return data
+		if (!data || Object.keys(data).length < 1) return data
 
 		const importance = {
 			className: 3,
@@ -16,7 +17,7 @@ export default function ClassesList({ title, filter }) {
 			classTime: 1,
 		}
 
-		const filtered = data.filter(item => {
+		const filtered = data?.filter(item => {
 			let score = 0
 			Object.keys(importance).forEach(key => {
 				if (key === 'trainer') {

@@ -1,6 +1,6 @@
 export default function ClassDetails({ classData }) {
 	return (
-		<div className='px-6 pt-4 flex flex-col gap-6'>
+		<div className=' pt-4 flex flex-col gap-4'>
 			<div>
 				<h3 className='text-lg leading-tight'>Schedule</h3>
 				<div className='flex items-center justify-between'>
