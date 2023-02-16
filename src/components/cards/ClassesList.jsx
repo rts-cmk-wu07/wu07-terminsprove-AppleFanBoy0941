@@ -1,13 +1,13 @@
 import useAxios from '../../hooks/useAxios'
 import ClassesCard from './ClassesCard'
 import { motion } from 'framer-motion'
-import { useEffect } from 'react'
 
 export default function ClassesList({ title, filter }) {
 	const { data, loading, error } = useAxios('classes', true)
 
 	function filterClasses() {
-		if (filter === '') return data
+		if (!filter || filter === '') return data
+		if (!data || Object.keys(data).length < 1) return data
 
 		const importance = {
 			className: 3,
@@ -17,7 +17,7 @@ export default function ClassesList({ title, filter }) {
 			classTime: 1,
 		}
 
-		const filtered = data.filter(item => {
+		const filtered = data?.filter(item => {
 			let score = 0
 			Object.keys(importance).forEach(key => {
 				if (key === 'trainer') {
@@ -37,10 +37,6 @@ export default function ClassesList({ title, filter }) {
 
 		return sorted
 	}
-
-	useEffect(() => {
-		console.log(filterClasses())
-	}, [filter])
 
 	// TODO: Add loading and error states for this component
 
@@ -69,7 +65,7 @@ export default function ClassesList({ title, filter }) {
 				{filterClasses().length > 0 ? (
 					filterClasses().map(item => <ClassesCard key={item.id} item={item} />)
 				) : (
-					<p className='text-base'>
+					<p className='text-base text-primary'>
 						Your search did not give any results. Try to search for something
 						else.
 					</p>

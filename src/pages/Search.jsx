@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import ClassesList from '../components/cards/ClassesList'
+import TrainersList from '../components/cards/TrainersList'
 import Input from '../components/Input'
 
 export default function Search() {
@@ -14,10 +15,16 @@ export default function Search() {
 				value={search}
 				onChange={e => setSearch(e.target.value)}
 			/>
-			<ClassesList
-				title={search !== '' ? 'Searched classes' : 'Popular classes'}
-				filter={search}
-			/>
+			<div className='flex flex-col gap-6'>
+				<ClassesList
+					title={search !== '' ? 'Searched Classes' : 'Popular Classes'}
+					filter={search}
+				/>
+				<TrainersList
+					title={search !== '' ? 'Searched Trainers' : 'Popular Trainers'}
+					filter={search}
+				/>
+			</div>
 		</div>
 	)
 }

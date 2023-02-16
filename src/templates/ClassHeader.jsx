@@ -8,10 +8,12 @@ import ClassicButton from '../components/ClassicButton'
 import SignInOut from './SignInOut'
 import { useNavigate } from 'react-router-dom'
 import isInClass from '../utils/isInClass'
+import Ratings from './Ratings'
 
 export default function ClassHeader({ classData, inClass, setInClass }) {
-	const [isSignUpSheetOpen, setIsSignUpSheetOpen] = useState(false) // if user is not signed in
-	const [isSignInOpen, setIsSignInOpen] = useState(false) // if user is not signed in and opens sign in sheet
+	const [isSignUpSheetOpen, setIsSignUpSheetOpen] = useState(false)
+	const [isSignInOpen, setIsSignInOpen] = useState(false)
+	const [isRatingOpen, setIsRatingOpen] = useState(false)
 
 	const { token } = useContext(TokenContext)
 
@@ -51,26 +53,38 @@ export default function ClassHeader({ classData, inClass, setInClass }) {
 				src={classData?.asset?.url}
 				alt={classData?.className}
 			/>
-			<div className='absolute inset-0 bg-gradient-to-t from-text/75 to-text/10 flex justify-between items-end py-6 pl-4 gap-2'>
-				<div>
-					<h1 className='text-background text-xl leading-none'>
-						{classData?.className}
-					</h1>
+			<div className='absolute inset-0 bg-gradient-to-t from-text/75 to-text/10 flex flex-col gap-2 justify-end py-6 pl-4'>
+				<h1 className='text-background text-xl leading-none'>
+					{classData?.className}
+				</h1>
+				<div className='flex justify-between items-center w-full'>
 					{/* // TODO: ratings here */}
 					{/* // ? Ville det være bedre at rykke title op over button, så ratings og button er på en linje, vil give mere plads til title */}
+					<div className='h-[74px] items-center flex'>
+						<Ratings classId={classData?.id} />
+					</div>
+					<AnimatePresence>
+						{!inClass ? (
+							<motion.div
+								animate={{ opacity: 1, x: '0%' }}
+								exit={{ opacity: 0, x: '100%' }}
+							>
+								<Button onClick={signUp} xSize='sm'>
+									Sign up
+								</Button>
+							</motion.div>
+						) : (
+							<motion.div
+								animate={{ opacity: 1, x: '0%' }}
+								exit={{ opacity: 0, x: '100%' }}
+							>
+								<Button xSize='sm' fontSize='base'>
+									Rate class
+								</Button>
+							</motion.div>
+						)}
+					</AnimatePresence>
 				</div>
-				<AnimatePresence>
-					{!inClass ? (
-						<motion.div
-							animate={{ opacity: 1, x: '0%' }}
-							exit={{ opacity: 0, x: '100%' }}
-						>
-							<Button onClick={signUp} xSize='sm'>
-								Sign up
-							</Button>
-						</motion.div>
-					) : null}
-				</AnimatePresence>
 			</div>
 			<Sheet
 				isOpen={isSignUpSheetOpen}
