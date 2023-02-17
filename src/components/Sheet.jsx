@@ -32,7 +32,6 @@ export default function Sheet({
 							clickOutsideCloses &&
 							!e.target.classList.contains('dontclose')
 						) {
-							console.log(clickOutsideCloses)
 							setIsOpen(false)
 						}
 					}}
@@ -41,7 +40,10 @@ export default function Sheet({
 						<motion.button
 							initial={{ opacity: 0, scale: 0.9 }}
 							animate={{ opacity: 1, scale: 1, transition: { delay: 0.3 } }}
-							onClick={() => setIsOpen(false)}
+							onClick={() => {
+								console.log(setIsOpen)
+								setIsOpen(false)
+							}}
 							className='top-6 right-6 h-8 w-8 absolute'
 						>
 							<X className='h-8 w-8 text-elevated' strokeWidth={3} />

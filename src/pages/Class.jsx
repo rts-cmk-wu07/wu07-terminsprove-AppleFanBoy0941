@@ -14,12 +14,10 @@ import TrainersList from '../components/cards/TrainersList'
 export default function Class() {
 	const [isLeaveOpen, setIsLeaveOpen] = useState(false)
 	const [inClass, setInClass] = useState(false)
-	console.log('inClass', inClass)
 	const { id } = useParams()
 	const { data, loading, error } = useAxios(`classes/${id}`, true)
 
 	const { token } = useContext(TokenContext)
-	const navigate = useNavigate()
 
 	const {
 		data: userData,
@@ -29,7 +27,6 @@ export default function Class() {
 	} = useAxios(`users/${token.userId}`)
 
 	useEffect(() => {
-		console.log('useEffect')
 		if (!data) return
 
 		setInClass(isInClass(userData, data.id) ? true : false)
@@ -52,26 +49,22 @@ export default function Class() {
 		setIsLeaveOpen(false)
 	}
 
-	console.log(data?.trainer?.trainerName)
-
 	return (
 		<div className='pb-6'>
-			<ClassHeader classData={data} inClass={inClass} setInClass={setInClass} />
+			<ClassHeader
+				classData={data}
+				inClass={inClass}
+				setInClass={setInClass}
+				loading={loading}
+				leaveClass={leaveClass}
+				setLeaveSheetOpen={setIsLeaveOpen}
+			/>
 			<div className='px-6'>
 				<ClassDetails classData={data} />
 				<div className='mt-2'>
 					<TrainersList title='Trainer' trainer={data?.trainer?.id} />
 				</div>
 
-				{inClass && (
-					<div className='mt-6'>
-						<ClassicButton
-							label='Leave class'
-							color='elevated'
-							onClick={() => setIsLeaveOpen(true)}
-						/>
-					</div>
-				)}
 				<Sheet
 					isOpen={isLeaveOpen}
 					setIsOpen={setIsLeaveOpen}

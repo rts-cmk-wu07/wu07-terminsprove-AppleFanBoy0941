@@ -10,14 +10,21 @@ import { useNavigate } from 'react-router-dom'
 import isInClass from '../utils/isInClass'
 import Ratings from './Ratings'
 
-export default function ClassHeader({ classData, inClass, setInClass }) {
+export default function ClassHeader({
+	classData,
+	inClass,
+	setInClass,
+	loading,
+	leaveClass,
+	setLeaveSheetOpen,
+}) {
 	const [isSignUpSheetOpen, setIsSignUpSheetOpen] = useState(false)
 	const [isSignInOpen, setIsSignInOpen] = useState(false)
 	const [isRatingOpen, setIsRatingOpen] = useState(false)
 
 	const { token } = useContext(TokenContext)
 
-	const { postData } = useAxios(`users/${token.userId}`)
+	const { postData, deleteData } = useAxios(`users/${token.userId}`)
 
 	function signUp() {
 		if (token.userId === '') {
@@ -54,14 +61,12 @@ export default function ClassHeader({ classData, inClass, setInClass }) {
 				alt={classData?.className}
 			/>
 			<div className='absolute inset-0 bg-gradient-to-t from-text/75 to-text/10 flex flex-col gap-2 justify-end py-6 pl-4'>
-				<h1 className='text-background text-xl leading-none'>
+				<h1 className='text-background text-xl leading-none pr-6'>
 					{classData?.className}
 				</h1>
 				<div className='flex justify-between items-center w-full'>
-					{/* // TODO: ratings here */}
-					{/* // ? Ville det være bedre at rykke title op over button, så ratings og button er på en linje, vil give mere plads til title */}
 					<div className='h-[74px] items-center flex'>
-						<Ratings classId={classData?.id} />
+						<Ratings classData={classData} canRate />
 					</div>
 					<AnimatePresence>
 						{!inClass ? (
@@ -78,8 +83,8 @@ export default function ClassHeader({ classData, inClass, setInClass }) {
 								animate={{ opacity: 1, x: '0%' }}
 								exit={{ opacity: 0, x: '100%' }}
 							>
-								<Button xSize='sm' fontSize='base'>
-									Rate class
+								<Button xSize='sm' onClick={() => setLeaveSheetOpen(true)}>
+									Leave
 								</Button>
 							</motion.div>
 						)}
