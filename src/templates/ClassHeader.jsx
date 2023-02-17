@@ -17,14 +17,20 @@ export default function ClassHeader({
 	loading,
 	leaveClass,
 	setLeaveSheetOpen,
+	userData,
+	userLoading,
+	getUserData,
+	postUserData,
 }) {
 	const [isSignUpSheetOpen, setIsSignUpSheetOpen] = useState(false)
 	const [isSignInOpen, setIsSignInOpen] = useState(false)
-	const [isRatingOpen, setIsRatingOpen] = useState(false)
+	const [isWarningOpen, setIsWarningOpen] = useState(false)
 
 	const { token } = useContext(TokenContext)
 
-	const { postData, deleteData } = useAxios(`users/${token.userId}`)
+	// const { data, postData, deleteData, getData } = useAxios(
+	// 	`users/${token.userId}`
+	// )
 
 	function signUp() {
 		if (token.userId === '') {
@@ -35,7 +41,26 @@ export default function ClassHeader({
 	}
 
 	async function subscribe() {
-		await postData(null, `/classes/${classData.id}`)
+		console.log(userLoading)
+		console.log('from header', userData)
+		console.log(
+			userData.classes?.map(c => c.classDay),
+			classData.classDay
+		)
+
+		await getUserData()
+
+		const hasClassThisDay = userData.classes?.some(
+			classItem => classItem.classDay === classData.classDay
+		)
+
+		console.log('has class this day?', hasClassThisDay)
+
+		if (hasClassThisDay) return setIsWarningOpen(true)
+
+		await postUserData(null, `/classes/${classData.id}`)
+
+		await getUserData()
 
 		setIsSignUpSheetOpen(false)
 
@@ -137,6 +162,30 @@ export default function ClassHeader({
 						setIsOpen={setIsSignInOpen}
 						additionalCallback={subscribe}
 					/>
+				</motion.div>
+			</Sheet>
+			<Sheet isOpen={isWarningOpen} setIsOpen={() => setIsWarningOpen(false)}>
+				<motion.div
+					variants={{
+						hidden: { opacity: 0 },
+						visible: {
+							opacity: 1,
+							transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+						},
+					}}
+					initial='hidden'
+					animate='visible'
+				>
+					<motion.h1
+						variants={textvariants}
+						className='text-xl leading-none mb-4'
+					>
+						You already have a class this day
+					</motion.h1>
+					<motion.p variants={textvariants} className='text-base'>
+						You can only sign up for one class per day. If you want to sign up
+						for this class you need to leave your current class.
+					</motion.p>
 				</motion.div>
 			</Sheet>
 		</div>

@@ -24,7 +24,11 @@ export default function Class() {
 		loading: userLoading,
 		error: userError,
 		deleteData: deleteUser,
+		getData: getUserData,
+		postData: postUserData,
 	} = useAxios(`users/${token.userId}`)
+
+	console.log('from class', userData)
 
 	useEffect(() => {
 		if (!data) return
@@ -46,6 +50,8 @@ export default function Class() {
 	async function leaveClass() {
 		await deleteUser(`/classes/${data.id}`)
 
+		await getUserData()
+
 		setIsLeaveOpen(false)
 	}
 
@@ -58,6 +64,11 @@ export default function Class() {
 				loading={loading}
 				leaveClass={leaveClass}
 				setLeaveSheetOpen={setIsLeaveOpen}
+				userData={userData}
+				userLoading={userLoading}
+				userError={userError}
+				getUserData={getUserData}
+				postUserData={postUserData}
 			/>
 			<div className='px-6'>
 				<ClassDetails classData={data} />
