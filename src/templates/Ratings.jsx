@@ -173,7 +173,7 @@ export default function Ratings({
 								drag='x'
 								dragConstraints={{ left: 0, right: 0 }}
 								dragElastic={0}
-								onDrag={(e, y) => setHighlightedStar(calculateSection(e))}
+								onDrag={e => setHighlightedStar(calculateSection(e))}
 								onDragEnd={e => {
 									setHighlightedStar(0)
 									setSelectedStars(calculateSection(e))

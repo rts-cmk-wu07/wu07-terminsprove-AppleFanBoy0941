@@ -41,13 +41,6 @@ export default function ClassHeader({
 	}
 
 	async function subscribe() {
-		console.log(userLoading)
-		console.log('from header', userData)
-		console.log(
-			userData.classes?.map(c => c.classDay),
-			classData.classDay
-		)
-
 		await getUserData() // update user data before checking if user has class this day
 
 		const hasClassThisDay = userData.classes?.some(

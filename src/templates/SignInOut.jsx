@@ -112,13 +112,10 @@ export default function SignInOut({
 		}
 
 		try {
-			const response = await axios.post(
-				`${import.meta.env.VITE_API_URL}users`,
-				{
-					username,
-					password,
-				}
-			)
+			await axios.post(`${import.meta.env.VITE_API_URL}users`, {
+				username,
+				password,
+			})
 
 			const tokenResponse = await axios.post(
 				`${import.meta.env.VITE_AUTH_URL}token`,
@@ -127,8 +124,6 @@ export default function SignInOut({
 					password,
 				}
 			)
-
-			console.log(tokenResponse)
 
 			setCookie('token', JSON.stringify(tokenResponse.data), {
 				days: formatDateToDays(tokenResponse.data.validUntil),
