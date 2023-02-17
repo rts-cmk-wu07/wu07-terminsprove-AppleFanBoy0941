@@ -50,7 +50,6 @@ export default function SignInOut({
 			return
 		}
 
-		console.log(import.meta.env.VITE_AUTH_URL + 'token')
 		try {
 			const response = await axios.post(
 				`${import.meta.env.VITE_AUTH_URL}token`,

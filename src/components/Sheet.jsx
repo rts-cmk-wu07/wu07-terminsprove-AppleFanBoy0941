@@ -41,7 +41,6 @@ export default function Sheet({
 							initial={{ opacity: 0, scale: 0.9 }}
 							animate={{ opacity: 1, scale: 1, transition: { delay: 0.3 } }}
 							onClick={() => {
-								console.log(setIsOpen)
 								setIsOpen(false)
 							}}
 							className='top-6 right-6 h-8 w-8 absolute'

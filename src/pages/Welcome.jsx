@@ -1,18 +1,30 @@
 import centerImage from '../assets/welcome_center.jpg'
-import { slideIn } from '../utils/motion'
 import { motion } from 'framer-motion'
 import Button from '../components/Button'
 import useLocalStorage from '../hooks/useSessionStorage'
-import { useNavigate } from 'react-router-dom'
-import { textVariant, staggerContainer } from '../utils/motion'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { textVariant } from '../utils/motion'
+import useDocumentTitle from '../hooks/useDocumentTitle'
+import { useEffect } from 'react'
 
 export default function Welcome() {
+	useDocumentTitle('Welcome – Believe Yourself')
+
 	const [welcomeScreen, setWelcomeScreen] = useLocalStorage(
 		'welcomeScreen',
 		true
 	)
 
 	const navigate = useNavigate()
+	const location = useLocation()
+
+	useEffect(() => {
+		if (location.pathname !== '/') {
+			navigate('/', { replace: true })
+
+			navigate(0)
+		}
+	}, [])
 
 	return (
 		<div

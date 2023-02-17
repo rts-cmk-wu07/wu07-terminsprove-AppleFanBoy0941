@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom'
 import ClassesList from '../components/cards/ClassesList'
 import TrainersList from '../components/cards/TrainersList'
 import Input from '../components/Input'
+import useDocumentTitle from '../hooks/useDocumentTitle'
 
 export default function Search() {
+	useDocumentTitle('Search – Fitness Verden')
+
 	const [search, setSearch] = useState('')
 	return (
 		<div className='px-6'>

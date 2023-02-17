@@ -4,8 +4,7 @@ import ScheduleLoader from '../loaders/ScheduleLoader'
 
 export default function ScheduleList({ schedule, loading }) {
 	const navigate = useNavigate()
-
-	console.log(loading)
+	
 	return (
 		<motion.ul
 			variants={{

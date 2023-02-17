@@ -60,7 +60,6 @@ export default function useAxios(endpoint, noToken, fullUrl = false) {
 	}
 
 	async function postData(data, additionalEndpoint = '') {
-		console.log(data)
 		if (!accessToken && !noToken) return
 		if (!endpoint) return
 
@@ -83,7 +82,6 @@ export default function useAxios(endpoint, noToken, fullUrl = false) {
 		if (response.status >= 200 && response.status < 300) {
 			setData(response.data)
 			setLoading(false)
-			console.log(response)
 		} else {
 			setError(response.status)
 			console.log(response)

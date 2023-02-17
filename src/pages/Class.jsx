@@ -10,6 +10,7 @@ import Sheet from '../components/Sheet'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import TrainersList from '../components/cards/TrainersList'
+import useDocumentTitle from '../hooks/useDocumentTitle'
 
 export default function Class() {
 	const [isLeaveOpen, setIsLeaveOpen] = useState(false)
@@ -19,6 +20,9 @@ export default function Class() {
 
 	const { token } = useContext(TokenContext)
 
+	useDocumentTitle(
+		data?.className + ' – Fitness Verden' || 'Class – Fitness Verden'
+	)
 	const {
 		data: userData,
 		loading: userLoading,
@@ -27,8 +31,6 @@ export default function Class() {
 		getData: getUserData,
 		postData: postUserData,
 	} = useAxios(`users/${token.userId}`)
-
-	console.log('from class', userData)
 
 	useEffect(() => {
 		if (!data) return
