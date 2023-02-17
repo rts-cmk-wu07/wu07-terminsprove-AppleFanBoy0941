@@ -1,15 +1,18 @@
 import { Star } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-export default function RatingStar({ index, average, userRating }) {
+export default function RatingStar({ index, average, userRating, size }) {
 	const backgroundFill =
 		index - average < 0 ? 1 : index - average > 1 ? 0 : 1 - (index - average)
 
 	const isFilled = index - userRating - 1 < 0
 
-	console.log(isFilled)
 	return (
-		<div className='relative w-8 h-8 bg-elevated/25 rounded-sm flex justify-center items-center'>
+		<div
+			className={`relative ${
+				size === 'sm' ? 'h-6 w-6' : 'w-8 h-8'
+			} bg-elevated/25 rounded-sm flex justify-center items-center`}
+		>
 			<motion.div
 				initial={{ width: '0%' }}
 				animate={{
@@ -20,7 +23,9 @@ export default function RatingStar({ index, average, userRating }) {
 						ease: backgroundFill < 1 ? 'easeOut' : 'linear',
 					},
 				}}
-				className='absolute top-0 left-0 h-full bg-elevated/25'
+				className={`absolute top-0 left-0 h-full ${
+					size === 'sm' ? 'bg-primary/25' : 'bg-primary/25'
+				}`}
 			/>
 			<motion.div
 				initial={{ opacity: 0, scale: isFilled ? 0 : 0 }}
@@ -39,7 +44,9 @@ export default function RatingStar({ index, average, userRating }) {
 				<Star
 					className={`${
 						isFilled ? 'text-primary fill-primary' : 'text-elevated/50'
-					}`}
+					}
+					${size === 'sm' ? 'h-4 w-4' : 'h-6 w-6'}
+					`}
 				/>
 			</motion.div>
 		</div>

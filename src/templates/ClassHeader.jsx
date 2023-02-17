@@ -66,7 +66,7 @@ export default function ClassHeader({
 				</h1>
 				<div className='flex justify-between items-center w-full'>
 					<div className='h-[74px] items-center flex'>
-						<Ratings classId={classData?.id} canRate />
+						<Ratings classData={classData} canRate />
 					</div>
 					<AnimatePresence>
 						{!inClass ? (

@@ -2,6 +2,7 @@ import axios from 'axios'
 import useAxios from '../../hooks/useAxios'
 import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
+import Ratings from '../../templates/Ratings'
 
 export default function ClassesCard({ item }) {
 	const navigate = useNavigate()
@@ -27,6 +28,7 @@ export default function ClassesCard({ item }) {
 				{item.className}
 			</Link>
 			{/* // TODO: Add star ratings here */}
+			<Ratings classData={item} showAverage={false} size='sm' />
 		</div>
 	)
 }

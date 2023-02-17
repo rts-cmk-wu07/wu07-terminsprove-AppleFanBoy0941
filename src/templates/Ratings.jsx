@@ -8,23 +8,29 @@ import { useContext } from 'react'
 import { motion } from 'framer-motion'
 import { Star } from 'lucide-react'
 import ClassicButton from '../components/ClassicButton'
+import isInClass from '../utils/isInClass'
 
-export default function Ratings({ classId, canRate = false }) {
+export default function Ratings({
+	classData,
+	canRate = false,
+	showAverage = true,
+	size,
+}) {
 	const [ratingIsOpen, setRatingIsOpen] = useState(false)
 	const [highlightedStar, setHighlightedStar] = useState(0)
 	const [selectedStars, setSelectedStars] = useState(0)
-	const { data, loading, error, postData } = useAxios(
-		`classes/${classId}/ratings`,
+	const { token } = useContext(TokenContext)
+	const { data, loading, error, patchData, getData, postData } = useAxios(
+		`classes/${classData.id}/ratings`,
 		true
 	)
-
-	console.log('ss', selectedStars)
-
-	const { token } = useContext(TokenContext)
+	const { data: userData, getData: getUserData } = useAxios(
+		`users/${token.userId}`
+	)
 
 	function average() {
 		if (!data || Object.keys(data).length < 0) return
-		const sum = data.reduce((acc, rating) => {
+		const sum = data?.reduce((acc, rating) => {
 			return acc + rating.rating
 		}, 0)
 
@@ -47,35 +53,61 @@ export default function Ratings({ classId, canRate = false }) {
 	}
 
 	async function submitRating() {
-		await postData({
-			rating: selectedStars,
-		})
+		// check if user has already rated
+		if (userRating) {
+			await patchData(
+				{
+					rating: selectedStars,
+				},
+				`/${token.userId}`
+			)
+		} else {
+			await postData({
+				userId: token.userId,
+				rating: selectedStars,
+			})
+		}
+
+		await getData()
+
 		setRatingIsOpen(false)
 	}
 
 	return (
 		<div
-			onClick={() => {
+			onClick={async () => {
 				if (canRate) {
 					if (ratingIsOpen) return
+					if (!token) return
+
+					await getUserData()
+
+					if (!userData.classes.find(c => c.id === classData.id)) return
 					setRatingIsOpen(true)
 				}
 			}}
 			className='flex items-center gap-2'
 		>
-			<div className='flex items-center gap-1 rounded-lg overflow-hidden'>
+			<div
+				className={`flex items-center ${
+					size === 'sm' ? 'gap-px' : 'gap-1'
+				} rounded-lg overflow-hidden`}
+			>
 				{stars.map(star => (
 					<RatingStar
 						key={star}
 						index={star}
 						average={averageRating}
 						userRating={userRating?.rating}
+						size={size}
 					/>
 				))}
 			</div>
-			<p className='text-base text-elevated/50'>
-				{isNaN(average()) ? null : average().toFixed(1)}
-			</p>
+			{showAverage && (
+				<p className='text-base text-elevated/50'>
+					{isNaN(average()) ? null : average().toFixed(1)}
+				</p>
+			)}
 			{canRate && (
 				<Sheet
 					isOpen={ratingIsOpen}

@@ -34,6 +34,31 @@ export default function useAxios(endpoint, noToken, fullUrl = false) {
 			})
 	}, [endpoint, accessToken, setToken])
 
+	async function getData() {
+		if (!accessToken && !noToken) return
+		if (!endpoint) return
+
+		setLoading(true)
+
+		refreshTokenFunction(setToken)
+
+		const response = await axios.get(
+			`${!fullUrl && import.meta.env.VITE_API_URL}${endpoint}`,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}
+		)
+
+		if (response.status >= 200 && response.status < 300) {
+			setData(response.data)
+			setLoading(false)
+		} else {
+			setError(response.status)
+		}
+	}
+
 	async function postData(data, additionalEndpoint = '') {
 		console.log(data)
 		if (!accessToken && !noToken) return
@@ -98,5 +123,33 @@ export default function useAxios(endpoint, noToken, fullUrl = false) {
 		}
 	}
 
-	return { data, loading, error, deleteData, postData }
+	async function patchData(data, additionalEndpoint = '') {
+		if (!accessToken && !noToken) return
+		if (!endpoint) return
+
+		setLoading(true)
+
+		refreshTokenFunction(setToken)
+
+		const response = await axios.patch(
+			`${
+				!fullUrl && import.meta.env.VITE_API_URL
+			}${endpoint}${additionalEndpoint}`,
+			data,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}
+		)
+
+		if (response.status >= 200 && response.status < 300) {
+			setData(response.data)
+			setLoading(false)
+		} else {
+			setError(response.status)
+		}
+	}
+
+	return { data, loading, error, getData, deleteData, postData, patchData }
 }

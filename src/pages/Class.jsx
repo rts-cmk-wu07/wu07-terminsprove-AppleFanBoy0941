@@ -14,12 +14,10 @@ import TrainersList from '../components/cards/TrainersList'
 export default function Class() {
 	const [isLeaveOpen, setIsLeaveOpen] = useState(false)
 	const [inClass, setInClass] = useState(false)
-	console.log('inClass', inClass)
 	const { id } = useParams()
 	const { data, loading, error } = useAxios(`classes/${id}`, true)
 
 	const { token } = useContext(TokenContext)
-	const navigate = useNavigate()
 
 	const {
 		data: userData,
@@ -29,7 +27,6 @@ export default function Class() {
 	} = useAxios(`users/${token.userId}`)
 
 	useEffect(() => {
-		console.log('useEffect')
 		if (!data) return
 
 		setInClass(isInClass(userData, data.id) ? true : false)
@@ -51,8 +48,6 @@ export default function Class() {
 
 		setIsLeaveOpen(false)
 	}
-
-	console.log(data?.trainer?.trainerName)
 
 	return (
 		<div className='pb-6'>
