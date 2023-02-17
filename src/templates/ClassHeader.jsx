@@ -48,19 +48,18 @@ export default function ClassHeader({
 			classData.classDay
 		)
 
-		await getUserData()
+		await getUserData() // update user data before checking if user has class this day
 
 		const hasClassThisDay = userData.classes?.some(
+			// check if user has class this day
 			classItem => classItem.classDay === classData.classDay
 		)
-
-		console.log('has class this day?', hasClassThisDay)
 
 		if (hasClassThisDay) return setIsWarningOpen(true)
 
 		await postUserData(null, `/classes/${classData.id}`)
 
-		await getUserData()
+		await getUserData() // update user data
 
 		setIsSignUpSheetOpen(false)
 
