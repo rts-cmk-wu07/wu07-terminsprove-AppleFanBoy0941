@@ -2,7 +2,7 @@ import centerImage from '../assets/welcome_center.jpg'
 import { slideIn } from '../utils/motion'
 import { motion } from 'framer-motion'
 import Button from '../components/Button'
-import useLocalStorage from '../hooks/useLocalStorage'
+import useLocalStorage from '../hooks/useSessionStorage'
 import { useNavigate } from 'react-router-dom'
 import { textVariant, staggerContainer } from '../utils/motion'
 

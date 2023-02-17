@@ -2,7 +2,7 @@ import Layout from './Layout'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/Home'
 import { useEffect, useState } from 'react'
-import useLocalStorage from './hooks/useLocalStorage'
+import useSessionStorage from './hooks/useSessionStorage'
 import Welcome from './pages/Welcome'
 import Search from './pages/Search'
 import TokenContext from './contexts/TokenContext'
@@ -21,10 +21,7 @@ function App() {
 		refreshToken(setToken)
 	}, [])
 
-	const [welcomeScreen, setWelcomeScreen] = useLocalStorage(
-		'welcomeScreen',
-		true
-	)
+	const [welcomeScreen] = useSessionStorage('welcomeScreen', true)
 
 	const router = createBrowserRouter([
 		{
