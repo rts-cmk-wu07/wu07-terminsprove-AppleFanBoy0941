@@ -8,7 +8,6 @@ import { useContext } from 'react'
 import { motion } from 'framer-motion'
 import { Star } from 'lucide-react'
 import ClassicButton from '../components/ClassicButton'
-import isInClass from '../utils/isInClass'
 
 export default function Ratings({
 	classData,
@@ -16,14 +15,15 @@ export default function Ratings({
 	showAverage = true,
 	size,
 }) {
+	const { token } = useContext(TokenContext)
 	const [ratingIsOpen, setRatingIsOpen] = useState(false)
 	const [highlightedStar, setHighlightedStar] = useState(0)
-	const [selectedStars, setSelectedStars] = useState(0)
-	const { token } = useContext(TokenContext)
 	const { data, loading, error, patchData, getData, postData } = useAxios(
 		`classes/${classData.id}/ratings`,
 		true
 	)
+
+	const [selectedStars, setSelectedStars] = useState()
 	const { data: userData, getData: getUserData } = useAxios(
 		`users/${token.userId}`
 	)
@@ -49,7 +49,7 @@ export default function Ratings({
 		const rect = e.target.getBoundingClientRect()
 		const x = e.clientX - rect.left
 		const section = Math.floor((x / rect.width) * 5) + 1
-		return section
+		return section > 5 ? 5 : section
 	}
 
 	async function submitRating() {
@@ -84,6 +84,7 @@ export default function Ratings({
 
 					if (!userData.classes.find(c => c.id === classData.id)) return
 					setRatingIsOpen(true)
+					setSelectedStars(userRating?.rating || 0)
 				}
 			}}
 			className='flex items-center gap-2'
@@ -117,7 +118,10 @@ export default function Ratings({
 					<motion.div
 						variants={{
 							hidden: { opacity: 0 },
-							visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+							visible: {
+								opacity: 1,
+								transition: { staggerChildren: 0.1, delayChildren: 0.3 },
+							},
 						}}
 						initial='hidden'
 						animate='visible'
@@ -132,14 +136,24 @@ export default function Ratings({
 						>
 							Rate this class
 						</motion.h2>
-						<p className='text-base'>
+						<motion.p
+							variants={{
+								hidden: { opacity: 0, y: 24 },
+								visible: { opacity: 1, y: 0 },
+							}}
+							className='text-base'
+						>
 							Help others find the best classes by rating this class. You can
 							change your rating at any time.
-						</p>
+						</motion.p>
 						<div className='relative flex items-center gap-4 justify-center my-6 p-2'>
 							{stars.map(star => (
 								<motion.div
 									key={star}
+									variants={{
+										hidden: { opacity: 0, y: 24 },
+										visible: { opacity: 1, y: 0 },
+									}}
 									animate={{
 										scale: highlightedStar >= star ? 1.3 : 1,
 										transition: { type: 'spring', stiffness: 500, damping: 15 },
@@ -159,35 +173,12 @@ export default function Ratings({
 								drag='x'
 								dragConstraints={{ left: 0, right: 0 }}
 								dragElastic={0}
-								onDrag={(e, y) => {
-									setHighlightedStar(calculateSection(e))
-								}}
+								onDrag={(e, y) => setHighlightedStar(calculateSection(e))}
 								onDragEnd={e => {
 									setHighlightedStar(0)
-
-									const x = e.clientX - e.target.getBoundingClientRect().left
-
-									// the width of the element
-									const w = e.target.getBoundingClientRect().width
-									const section = w / 5
-
-									console.log(
-										w,
-										section,
-										Math.floor(x / section) + 1 > 5
-											? 5
-											: Math.floor(x / section) + 1
-									)
-
-									setSelectedStars(
-										Math.floor(x / section) + 1 > 5
-											? 5
-											: Math.floor(x / section) + 1
-									)
-								}}
-								onClick={e => {
 									setSelectedStars(calculateSection(e))
 								}}
+								onClick={e => setSelectedStars(calculateSection(e))}
 								className='absolute bg-transparent h-full w-full'
 							/>
 						</div>
