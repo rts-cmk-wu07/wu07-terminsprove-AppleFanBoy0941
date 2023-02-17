@@ -68,10 +68,6 @@ export default function useAxios(endpoint, noToken, fullUrl = false) {
 
 		refreshTokenFunction(setToken)
 
-		console.log(
-			!fullUrl && import.meta.env.VITE_API_URL + endpoint + additionalEndpoint
-		)
-
 		const response = await axios.post(
 			`${
 				!fullUrl && import.meta.env.VITE_API_URL
@@ -83,8 +79,6 @@ export default function useAxios(endpoint, noToken, fullUrl = false) {
 				},
 			}
 		)
-
-		console.log(response)
 
 		if (response.status >= 200 && response.status < 300) {
 			setData(response.data)
